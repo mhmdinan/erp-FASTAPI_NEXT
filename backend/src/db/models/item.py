@@ -1,8 +1,7 @@
-from base import Base
+from engine import Base
 from datetime import datetime, timezone
 from sqlalchemy.orm import Mapped, mapped_column
 from sqlalchemy import DateTime
-from sqlalchemy.sql import func
 
 class ItemModel(Base):
     __tablename__ = "item"
