@@ -3,7 +3,7 @@ from datetime import datetime, timezone
 from sqlalchemy.orm import Mapped, mapped_column
 from sqlalchemy import DateTime
 
-class ItemModel(Base):
+class Item(Base):
     __tablename__ = "item"
 
     # Core
