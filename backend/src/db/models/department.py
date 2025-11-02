@@ -8,7 +8,7 @@ class Department(Base):
     id: Mapped[int] = mapped_column(primary_key=True, index=True)
     name: Mapped[str] = mapped_column(nullable=False, index=True)
     
-    #employees
+    #employees inside department
     employees: Mapped[list["Employee"]] = relationship(
         "Employee", back_populates="department", cascade="save-update"
     )

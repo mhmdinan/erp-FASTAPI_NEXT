@@ -4,6 +4,7 @@ from sqlalchemy import ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from .department import Department
 from engine import Base
+from .user import User
 
 class Employee(Base):
     __tablename__ = "employee"
@@ -20,5 +21,10 @@ class Employee(Base):
     job_title: Mapped[str] = mapped_column(nullable=False)
     department_id: Mapped[int] = mapped_column(ForeignKey("department.id"))
     department: Mapped["Department"] = relationship(
-        "Department", back_populates="employee"
+        "Department", back_populates="employees"
+    )
+
+    #User if ERP access allowed
+    user: Mapped[Optional[User]] = relationship(
+        "User", back_populates="employee", uselist=False
     )
