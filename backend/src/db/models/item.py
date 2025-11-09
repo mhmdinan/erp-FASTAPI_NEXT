@@ -20,4 +20,5 @@ class Item(Base):
         default=datetime.now(timezone.utc),
         onupdate=datetime.now(timezone.utc),
     )
+    is_active: Mapped[bool] = mapped_column(default=True)
 
