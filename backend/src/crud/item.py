@@ -3,10 +3,6 @@ from sqlalchemy.orm import Session
 from db.models.item import Item as item_model
 from schemas import item as item_schema
 
-@dataclass
-class SearchConfig:
-    pass
-
 def create_item(
         db: Session,
         created_item: item_schema.ItemCreate

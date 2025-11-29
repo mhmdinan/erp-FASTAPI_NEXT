@@ -5,4 +5,5 @@ Will be modeled after [full-stack-fastapi-template](https://github.com/fastapi/f
 
 Frameworks: FastAPI (For backend API using Python)
 
-Database: PostgresQL
+Database: using a sqlite db for quick development. Can be switched easily in db_url setting later in db.py.
+plan to move db_url to an env variable.
