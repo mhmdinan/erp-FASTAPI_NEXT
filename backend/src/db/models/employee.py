@@ -3,7 +3,7 @@ from typing import Optional
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from .department import Department
-from engine import Base
+from db.db import Base
 from .user import User
 
 class Employee(Base):

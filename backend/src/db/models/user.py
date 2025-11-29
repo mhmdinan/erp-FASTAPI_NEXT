@@ -1,7 +1,7 @@
 from datetime import datetime
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy import func, ForeignKey
-from engine import Base
+from db.db import Base
 from typing import Optional
 from .employee import Employee
 

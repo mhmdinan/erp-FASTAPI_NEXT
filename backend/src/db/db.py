@@ -8,3 +8,7 @@ engine = create_engine(DB_URL)
 SessionLocal = sessionmaker(autoflush=False, bind=engine)
 
 Base = declarative_base()
+
+def get_db():
+    with SessionLocal() as session:
+        yield session

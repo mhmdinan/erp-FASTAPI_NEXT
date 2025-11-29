@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from .employee import Employee
-from engine import Base
+from db.db import Base
 
 class Department(Base):
     __tablename__ = "department"
