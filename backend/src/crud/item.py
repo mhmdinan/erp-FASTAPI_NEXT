@@ -1,3 +1,4 @@
+from typing import Optional
 from sqlalchemy.orm import Session
 from db.models.item import Item as item_model
 from schemas import item as item_schema
@@ -35,11 +36,13 @@ def get_item_by_id(
 
 def get_items(
     db: Session,
-    search_settings: item_schema.ItemsList
+    skip: int = 0,
+    limit: int = 20,
+    search: Optional[str] = None
 ):
     query = db.query(item_model)
     total = query.count()
-    items = query.offset(search_settings.skip).limit(search_settings.limit).all()
+    items = query.offset(skip).limit(limit).all()
     return items, total
 
 def update_item(

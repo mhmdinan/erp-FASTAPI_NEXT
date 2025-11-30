@@ -1,5 +1,4 @@
 from datetime import datetime
-from typing import Optional
 from pydantic import BaseModel
 
 class ItemBase(BaseModel):
@@ -22,8 +21,4 @@ class ItemInDB(ItemBase):
 class ItemUpdate(ItemCreate):
     pass
 
-class ItemsList(BaseModel):
-    skip: int = 0
-    limit: int = 20
-    search: Optional[str] = None
     
