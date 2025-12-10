@@ -11,7 +11,7 @@ class Item(Base):
     sku: Mapped[str] = mapped_column(unique=True, nullable=False)
     name: Mapped[str] = mapped_column(nullable=False)
     quantity_on_hand: Mapped[int] = mapped_column(nullable=False)
-    description: Mapped[str] = mapped_column()
+    description: Mapped[str] = mapped_column(nullable=True)
     created_at: Mapped[datetime] = mapped_column(
         DateTime, default=datetime.now(timezone.utc)
     )

@@ -21,7 +21,7 @@ def item_router_create_item(
     return item
 
 
-@item_router.get("/get-item-byname/{item-name}")
+@item_router.get("/get-item-byname/{item_name}")
 def item_router_get_item_byname(item_name: str, db: Session = Depends(get_db)):
     item = item_crud.get_item(db, item_name)
     if item is None:
@@ -29,7 +29,7 @@ def item_router_get_item_byname(item_name: str, db: Session = Depends(get_db)):
     return item
 
 
-@item_router.get("/get-item-bysky/{item-sku}")
+@item_router.get("/get-item-bysky/{item_sku}")
 def item_router_get_item_bysku(item_sku: str, db: Session = Depends(get_db)):
     item = item_crud.get_item_by_sku(db, item_sku)
     if item is None:
@@ -37,7 +37,7 @@ def item_router_get_item_bysku(item_sku: str, db: Session = Depends(get_db)):
     return item
 
 
-@item_router.get("/get-item-byid/{item-id}")
+@item_router.get("/get-item-byid/{item_id}")
 def item_router_get_item_byid(item_id: int, db: Session = Depends(get_db)):
     item = item_crud.get_item_by_id(db, item_id)
     if item is None:
@@ -66,7 +66,7 @@ def item_router_get_items(
     return [items, total]
 
 
-@item_router.put("/deactivate-item/{item-name}")
+@item_router.put("/deactivate-item/{item_name}")
 def item_router_deactivate_item(item_name: str, db: Session = Depends(get_db)):
     item = item_crud.deactivate_item(db, item_name)
     if item is None:
@@ -74,9 +74,19 @@ def item_router_deactivate_item(item_name: str, db: Session = Depends(get_db)):
     return item
 
 
-@item_router.put("/activate-item/{item-name}")
+@item_router.put("/activate-item/{item_name}")
 def item_router_activate_item(item_name: str, db: Session = Depends(get_db)):
     item = item_crud.activate_item(db, item_name)
     if item is None:
         raise HTTPException(status_code=404, detail="item not found")
     return item
+
+
+@item_router.get("/get-item-names/{item-name}")
+def item_router_get_item_names(
+    item_name: str | None,
+    skip: int = Query(0, ge=0),
+    limit: int = Query(50, ge=1, le=200),  # prevent abuse, max 200
+    db: Session = Depends(get_db),
+):
+    return item_crud.get_item_names(db, search=item_name, skip=skip, limit=limit)
