@@ -21,4 +21,7 @@ class ItemInDB(ItemBase):
 class ItemUpdate(ItemCreate):
     pass
 
+class ItemUpdateByID(ItemUpdate):
+    id: int
+
     

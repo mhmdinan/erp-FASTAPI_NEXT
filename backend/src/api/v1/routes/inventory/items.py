@@ -82,11 +82,21 @@ def item_router_activate_item(item_name: str, db: Session = Depends(get_db)):
     return item
 
 
-@item_router.get("/get-item-names/{item-name}")
+@item_router.get("/get-item-names")
 def item_router_get_item_names(
-    item_name: str | None,
+    item_name: str | None = Query(None),
     skip: int = Query(0, ge=0),
     limit: int = Query(50, ge=1, le=200),  # prevent abuse, max 200
     db: Session = Depends(get_db),
 ):
     return item_crud.get_item_names(db, search=item_name, skip=skip, limit=limit)
+
+
+@item_router.put("/update-item-by-id/{item_id}")
+def item_router_update_item_by_id(
+    item_to_update: item_schema.ItemUpdateByID, db: Session = Depends(get_db)
+):
+    item = item_crud.update_item_by_id(db, item_to_update)
+    if item is None:
+        raise HTTPException(status_code=404, detail="item not found")
+    return item

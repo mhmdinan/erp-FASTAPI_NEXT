@@ -90,3 +90,14 @@ def get_item_names(
 
     results = query.all()
     return [row[0] for row in results]  # flatten to List[str]
+
+def update_item_by_id(db: Session, item: item_schema.ItemUpdateByID):
+    db_item = db.query(item_model).filter(item_model.id == item.id).first()
+    if db_item is None:
+        return None
+    db_item.name = item.name
+    db_item.sku = item.sku
+    db_item.quantity_on_hand = item.quantity_on_hand
+    db.commit()
+    db.refresh(db_item)
+    return db_item
