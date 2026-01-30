@@ -1,11 +1,14 @@
 from typing import Optional
 from fastapi import APIRouter, Depends, HTTPException, Query
+from api.v1.deps import get_current_user
 from crud import item as item_crud
 from db.db import get_db
 from sqlalchemy.orm import Session
 from schemas import item as item_schema
 
-item_router = APIRouter()
+item_router = APIRouter(
+    dependencies=[Depends(get_current_user)]
+)
 
 
 @item_router.get("/")
