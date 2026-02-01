@@ -1,13 +1,30 @@
-import './App.css'
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
+import LoginPage from './features/auth/LoginPage';
+import {CONFIG} from './core/config';
+import { useEffect } from 'react';
 
 function App() {
+  useEffect(() => {
+    document.title = `${CONFIG.COMPANY_NAME} | ${CONFIG.APP_TITLE}`;
+  }, []);
+
+  const isAuthenticated = !!localStorage.getItem('token');
+
+
   return (
-    <div className="flex h-screen items-center justify-center bg-zinc-900">
-      <h1 className="text-4xl font-bold text-cyan-400">
-        ERP Frontend Connected
-      </h1>
-    </div>
-  )
+    <BrowserRouter>
+      <Routes>
+        <Route
+          path="/"
+          element={isAuthenticated ? <Navigate to="/dashboard" /> : <Navigate to="/login" />}
+          />
+
+          <Route path="login" element={<LoginPage />}/>
+
+
+      </Routes>
+    </BrowserRouter>
+  );
 }
 
 export default App
