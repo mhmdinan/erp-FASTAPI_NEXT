@@ -24,7 +24,7 @@ export default function LoginPage() {{
             formData.append('username', data.username);
             formData.append('password', data.password);
 
-            const response = await apiClient.post('/login', formData);
+            const response = await apiClient.post('/auth/login', formData);
 
             localStorage.setItem('token', response.data.access_token);
 

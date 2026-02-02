@@ -2,6 +2,8 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import LoginPage from './features/auth/LoginPage';
 import {CONFIG} from './core/config';
 import { useEffect } from 'react';
+import Dashboard from './pages/Dashboard';
+import ProtectedRoute from './components/layout/auth/ProtectedRoute';
 
 function App() {
   useEffect(() => {
@@ -19,9 +21,11 @@ function App() {
           element={isAuthenticated ? <Navigate to="/dashboard" /> : <Navigate to="/login" />}
           />
 
-          <Route path="login" element={<LoginPage />}/>
+          <Route path="/login" element={<LoginPage />}/>
 
-
+          <Route element={<ProtectedRoute />}>
+          <Route path="/dashboard" element={<Dashboard/>}/>
+          </Route>
       </Routes>
     </BrowserRouter>
   );
