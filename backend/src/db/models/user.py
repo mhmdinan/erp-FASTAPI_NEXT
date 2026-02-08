@@ -1,15 +1,17 @@
 from datetime import datetime
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from sqlalchemy import func, ForeignKey, event
+from sqlalchemy import func, ForeignKey
 from .base import Base
 from typing import Optional, TYPE_CHECKING
+from .user_role import user_roles
 
 if TYPE_CHECKING:
     from .employee import Employee
+    from .role import Role
 
 
 class User(Base):
-    __tablename__ = "user"
+    __tablename__ = "users"
 
     id: Mapped[int] = mapped_column(primary_key=True, index=True)
     username: Mapped[str] = mapped_column(unique=True, nullable=False, index=True)
@@ -27,5 +29,7 @@ class User(Base):
     updated_at: Mapped[datetime] = mapped_column(server_default=func.now(), onupdate=func.now())
 
     #Employee mapping
-    employee_id: Mapped[Optional[int]] = mapped_column(ForeignKey("employee.id"), unique=True)
+    employee_id: Mapped[Optional[int]] = mapped_column(ForeignKey("employees.id"), unique=True)
     employee: Mapped[Optional["Employee"]] = relationship("Employee", back_populates="user")
+
+    roles: Mapped[list["Role"]] = relationship(back_populates="users", secondary=user_roles)

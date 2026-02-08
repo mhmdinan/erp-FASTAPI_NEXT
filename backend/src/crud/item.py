@@ -1,76 +1,98 @@
 from typing import List, Optional
-from sqlalchemy.orm import Session
-from sqlalchemy import func
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy import func, select
 from db.models.item import Item as item_model
 from schemas import item as item_schema
 
 
-def create_item(db: Session, created_item: item_schema.ItemCreate):
+async def create_item(db: AsyncSession, created_item: item_schema.ItemCreate):
     db_item = item_model(**created_item.model_dump())
     db.add(db_item)
-    db.commit()
-    db.refresh(db_item)
+    await db.commit()
+    await db.refresh(db_item)
     return db_item
 
 
-def get_item(db: Session, item_name: str):
-    db_item = db.query(item_model).filter(item_model.name == item_name).first()
-    return db_item
+async def get_item(db: AsyncSession, item_name: str):
+    db_item = await db.execute(
+        select(item_model).where(item_model.name == item_name)
+    )
+    return db_item.scalar_one_or_none()
 
 
-def get_item_by_sku(db: Session, item_sku: str):
-    db_item = db.query(item_model).filter(item_model.sku == item_sku).first()
-    return db_item
+async def get_item_by_sku(db: AsyncSession, item_sku: str):
+    db_item = await db.execute(
+        select(item_model).where(item_model.sky == item_sku)
+    )
+    return db_item.scalar_one_or_none()
 
 
-def get_item_by_id(db: Session, item_id: int):
-    db_item = db.query(item_model).filter(item_model.id == item_id).first()
-    return db_item
+async def get_item_by_id(db: AsyncSession, item_id: int):
+    db_item = await db.execute(
+        select(item_model).where(item_model.id == item_id)
+    )
+    return db_item.scalar_one_or_none()
 
 
-def get_items(
-    db: Session, skip: int = 0, limit: int = 20, search: Optional[str] = None
+async def get_items(
+    db: AsyncSession, skip: int = 0, limit: int = 20, search: Optional[str] = None
 ):
-    query = db.query(item_model)
-    total = query.count()
-    items = query.offset(skip).limit(limit).all()
+    count_query = select(func.count()).select_from(select(item_model).subquery())
+    total_result = await db.execute(count_query)
+    total = total_result.scalar_one()
+
+    # Paginated items
+    item_query = select(item_model).offset(skip).limit(limit)
+    result = await db.execute(item_query)
+    items = result.scalars().all()
+
     return items, total
 
 
-def update_item(db: Session, item: item_schema.ItemUpdate):
-    db_item = db.query(item_model).filter(item_model.name == item.name).first()
+async def update_item(db: AsyncSession, item: item_schema.ItemUpdate):
+    result = await db.execute(
+        select(item_model).where(item_model.name == item.name)
+    )
+    db_item = result.scalar_one_or_none()
     if db_item is None:
         return None
     db_item.name = item.name
     db_item.sku = item.sku
     db_item.quantity_on_hand = item.quantity_on_hand
-    db.commit()
-    db.refresh(db_item)
+
+    await db.commit()
+    await db.refresh(db_item)
     return db_item
 
 
-def deactivate_item(db: Session, item_name: str):
-    db_item = db.query(item_model).filter(item_model.name == item_name).first()
+async def deactivate_item(db: AsyncSession, item_name: str):
+    result = await db.execute(
+        select(item_model).where(item_model.name == item_name)
+    )
+    db_item = result.scalar_one_or_none()
     if db_item is None:
         return None
     db_item.is_active = False
-    db.commit()
-    db.refresh(db_item)
+    await db.commit()
+    await db.refresh(db_item)
     return db_item
 
 
-def activate_item(db: Session, item_name: str):
-    db_item = db.query(item_model).filter(item_model.name == item_name).first()
+async def activate_item(db: AsyncSession, item_name: str):
+    result = await db.execute(
+        select(item_model).where(item_model.name == item_name)
+    )
+    db_item = result.scalar_one_or_none()
     if db_item is None:
         return None
     db_item.is_active = True
-    db.commit()
-    db.refresh(db_item)
+    await db.commit()
+    await db.refresh(db_item)
     return db_item
 
 
-def get_item_names(
-    db: Session,
+async def get_item_names(
+    db: AsyncSession,
     search: str | None = None,
     skip: int = 0,
     limit: int = 50,  # safe default, you can make it configurable
@@ -79,25 +101,29 @@ def get_item_names(
     Returns a paginated list of item names, optionally filtered by a search term.
     Perfect for HTML <select>, Select2, React-Select, etc.
     """
-    query = db.query(item_model.name).filter(item_model.is_active)
+    query = select(item_model.name).where(item_model.is_active.is_(True))
 
     if search:
         # Case-insensitive partial match
         search_term = f"%{search.lower()}%"
-        query = query.filter(func.lower(item_model.name).like(search_term))
+        query = query.where(func.lower(item_model.name).like(search_term))
 
     query = query.order_by(item_model.name).offset(skip).limit(limit)
 
-    results = query.all()
-    return [row[0] for row in results]  # flatten to List[str]
+    result = await db.execute(query)
+    return result.scalars().all()
 
-def update_item_by_id(db: Session, item: item_schema.ItemUpdateByID):
-    db_item = db.query(item_model).filter(item_model.id == item.id).first()
+async def update_item_by_id(db: AsyncSession, item: item_schema.ItemUpdateByID):
+    result = await db.execute(
+        select(item_model).where(item_model.id == item.id)
+    )
+    db_item = result.scalar_one_or_none()
     if db_item is None:
         return None
     db_item.name = item.name
     db_item.sku = item.sku
     db_item.quantity_on_hand = item.quantity_on_hand
-    db.commit()
-    db.refresh(db_item)
+
+    await db.commit()
+    await db.refresh(db_item)
     return db_item

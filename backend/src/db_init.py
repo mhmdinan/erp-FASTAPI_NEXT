@@ -7,9 +7,30 @@ from db.db import SessionLocal, engine
 from db.models.department import Department
 from db.models.employee import Employee
 from db.models.user import User
+from db.models.role import Role
 
+roles = [
+        {"name": "admin", "description": "Full access"},
+        {"name": "manager", "description": "Manage Content"},
+        {"name": "viewer", "description": "Read-only"}
+        ]
 
 async def init_db(db: AsyncSession) -> None:
+    
+    for role_data in roles:
+        result = await db.execute(
+            select(Role).where(Role.name == role_data["name"])
+        )
+        existing_role = result.scalar_one_or_none()
+
+        if not existing_role:
+            new_role = Role(**role_data)
+            db.add(new_role)
+            print(f"Created new role: {role_data['name']}" )
+        else:
+            print(f"Role already exists: {role_data['name']}")
+    await db.flush()
+
     result = await db.execute(
         select(Department).where(Department.code == "ADMIN")
     )
@@ -49,6 +70,10 @@ async def init_db(db: AsyncSession) -> None:
     )
     user = result.scalar_one_or_none()
     if not user:
+        result = await db.execute(
+            select(Role).where(Role.name == "admin")
+        )
+        admin_role = result.scalar_one_or_none()
         user = User(
             username="admin",
             email="admin@erp.com",
@@ -57,6 +82,7 @@ async def init_db(db: AsyncSession) -> None:
             is_superuser=True,
             employee_id=employee.id,
         )
+        user.roles.append(admin_role)
         db.add(user)
         print("Create User: admin")
     else:
