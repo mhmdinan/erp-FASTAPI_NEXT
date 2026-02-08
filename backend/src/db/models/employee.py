@@ -3,7 +3,7 @@ from typing import Optional, TYPE_CHECKING
 from sqlalchemy import ForeignKey, func
 from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from db.base import Base
+from .base import Base
 
 if TYPE_CHECKING:
     from db.models.department import Department

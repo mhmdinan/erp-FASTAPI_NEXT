@@ -1,7 +1,7 @@
 from datetime import datetime
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy import func, ForeignKey, event
-from db.base import Base
+from .base import Base
 from typing import Optional, TYPE_CHECKING
 
 if TYPE_CHECKING:

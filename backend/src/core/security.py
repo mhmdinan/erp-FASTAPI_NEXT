@@ -10,7 +10,6 @@ ALGORITHM = "HS256"
 
 
 def hash_password(password: str):
-    print(f"TYPE: {type(password)} | VALUE: {password}")
     return pwd_context.hash(str(password))
 
 
