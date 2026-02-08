@@ -3,7 +3,7 @@ import LoginPage from './features/auth/LoginPage';
 import {CONFIG} from './core/config';
 import { useEffect } from 'react';
 import Dashboard from './pages/Dashboard';
-import ProtectedRoute from './components/layout/auth/ProtectedRoute';
+import ProtectedRoute from './components/auth/ProtectedRoute';
 
 function App() {
   useEffect(() => {
