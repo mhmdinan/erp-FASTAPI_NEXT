@@ -19,4 +19,3 @@ app.add_middleware(
 )
 
 app.include_router(main_router, prefix="/api/v1")
-Base.metadata.create_all(bind=engine)

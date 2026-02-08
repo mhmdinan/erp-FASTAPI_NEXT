@@ -5,13 +5,17 @@ from db.base import Base
 from db.models import department, user, item, employee
 
 # TODO: Add db currently using placeholder
-DB_URL = "sqlite:///erp.db"
-engine = create_async_engine(DB_URL)
+DB_URL = "sqlite+aiosqlite:///erp.db"
+engine = create_async_engine(DB_URL, echo = False)
 SessionLocal = sessionmaker(
-    autoflush=False, autocommit=False, bind=engine, class_=AsyncSession, expire_on_commit= False
+    autoflush=False,
+    autocommit=False,
+    bind=engine,
+    class_=AsyncSession,
+    expire_on_commit=False,
 )
 
 
-def get_db():
-    with SessionLocal() as session:
+async def get_db():
+    async with SessionLocal() as session:
         yield session
