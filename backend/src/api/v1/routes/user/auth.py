@@ -9,11 +9,11 @@ from schemas import auth as auth_schema
 auth_router = APIRouter()
 
 @auth_router.post("/login", response_model=auth_schema.Token)
-def login_access_token(
+async def login_access_token(
     db: Session = Depends(get_db),
     form_data: OAuth2PasswordRequestForm = Depends()
 ):
-    user = authenticate_user(
+    user = await authenticate_user(
         db, email=form_data.username, password=form_data.password
     )
 

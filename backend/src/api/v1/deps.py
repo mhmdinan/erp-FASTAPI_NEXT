@@ -9,7 +9,7 @@ from db.models.user import User
 
 oauth = OAuth2PasswordBearer(tokenUrl="api/v1/auth/login")
 
-def get_current_user(
+async def get_current_user(
         db: Session = Depends(get_db),
         token: str = Depends(oauth)
 ):
@@ -21,7 +21,7 @@ def get_current_user(
         )
     
     email: str =  payload.get("sub")
-    user = get_user_by_email(db, email)
+    user = await get_user_by_email(db, email)
 
     if not user:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
