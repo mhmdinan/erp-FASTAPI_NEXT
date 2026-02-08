@@ -11,5 +11,5 @@ dependencies = [
     "passlib[bcrypt]>=1.7.4",
     "pydantic-settings>=2.12.0",
     "python-jose>=3.5.0",
-    "sqlalchemy>=2.0.44",
+    "sqlalchemy[asyncio]>=2.0.44",
 ]
