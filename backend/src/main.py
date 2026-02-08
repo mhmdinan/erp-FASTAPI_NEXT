@@ -1,8 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from api.v1.main import main_router
-from db.db import engine
-from db.base import Base
 
 app = FastAPI(
     title="ERP System backend API",

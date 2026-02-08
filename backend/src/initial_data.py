@@ -7,7 +7,6 @@ from db.db import SessionLocal, engine
 from db.models.department import Department
 from db.models.employee import Employee
 from db.models.user import User
-from schemas.user import UserCreate
 
 
 async def init_db(db: AsyncSession) -> None:
