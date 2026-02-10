@@ -38,29 +38,6 @@ Heavy polishing and development planned for both
 - Learn modern React development
 - Explore containerization & CI/CD in a small/personal setup
 
-## Planned Core Modules (MVP → future)
-
-1. **Authentication & Users**  
-   Register, login, JWT tokens, role-based access (admin, manager, staff…)
-
-2. **Inventory / Products**  
-   CRUD products, categories, units, stock levels, stock movements (in/out/adjust)
-
-3. **Purchases / Procurement**  
-   Suppliers, purchase orders, goods receipt
-
-4. **Sales / Orders**  
-   Customers, sales orders, invoices (basic)
-
-5. **Dashboard & Reports** (future)  
-   Basic stock overview, low-stock alerts, simple analytics
-
-6. **Nice-to-have later**  
-   - Multi-warehouse  
-   - Basic accounting entries  
-   - PDF generation (invoices, PO)  
-   - Notifications / audit log
-
 ## Current Project Structure
 
 ```text
