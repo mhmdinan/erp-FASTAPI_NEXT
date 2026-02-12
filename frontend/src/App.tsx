@@ -10,7 +10,7 @@ function App() {
     document.title = `${CONFIG.COMPANY_NAME} | ${CONFIG.APP_TITLE}`;
   }, []);
 
-  const isAuthenticated = !!localStorage.getItem('token');
+  const isAuthenticated = !localStorage.getItem('token');
 
 
   return (
