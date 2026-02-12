@@ -1,4 +1,5 @@
 import { CONFIG } from "../core/config";
+import TopBar from "../components/layout/TopBar";
 
 export default function Dashboard() {
     const username = "Admin";
@@ -6,7 +7,7 @@ export default function Dashboard() {
     return (
         <div>
             <div>
-
+                <TopBar></TopBar>
             </div>
             <h1>Welcome back, <span>{username}</span></h1>
             <p>

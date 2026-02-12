@@ -3,7 +3,6 @@ import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import * as z from 'zod';
 import { apiClient } from '../../lib/api-client';
-import {CONFIG} from '../../core/config';
 
 const loginSchema = z.object({
     username: z.string().min(1, "username is required"),
@@ -38,37 +37,38 @@ export default function LoginPage() {{
         <div className='flex min-h-screen items-center justify-center'>
             <div>
 
-                <form onSubmit={handleSubmit(onSubmit)} className='flex flex-col gap-6 items-center'>
-                    <div>
-                        <h1 className='text-base/7 font-semibold relative'>Login</h1>
-                        <p className='mt-1 text-sm/6 text-gray-800'>Enter your ERP credentials to login to your account</p>
+                <form onSubmit={handleSubmit(onSubmit)} className='flex flex-col gap-6 items-center justify-center'>
+                    <div className='flex flex-col justify-center'>
+                        <h1 className='text-base/7 font-semibold text-center'>Login</h1>
+                        <p className='mt-1 text-sm/6 text-gray-800 text-center'>Enter your credentials to login to your account</p>
                     </div>
-                    <div className='items-center'>
+                    <div className='relative'>
                         <label htmlFor='username' className='block text-sm/6 font-medium'>Username</label>
                         <input
                         {...register('username')}
-                        className='border rounded-md text-sm/7 mt-2'
+                        className='border rounded-md text-sm/7 mt-2 px-3'
                         type='text'
                         name='username'
                         id='username'
                         placeholder='email@example.com'
                         />
-                        {errors.username && <p>{errors.username.message}</p>}
+                        {errors.username && <p className='text-red-500 text-xs h-5'>{errors.username.message}</p>}
                     </div>
                     <div>
                         <label className='block text-sm/6 font-medium'>Password</label>
                         <input
                         type='password'
                         {...register('password')}
-                        className='border rounded-md text-sm/7 placeholder: center'
+                        className='border rounded-lg text-sm/7 px-3'
                         name='password'
                         id='password'
-                        placeholder='***'
+                        placeholder='******'
                         />
-                        {errors.password && <p>{errors.password.message}</p>}
+                        {errors.password && <p className='text-red-500 text-xs h-5'>{errors.password.message}</p>}
                     </div>
 
                     <button
+                    className='bg-indigo-500 text-white border rounded-md px-3 py-1 font-semibold shadow-md hover:bg-indigo-800 transition duration-200 active:scale-95'
                     disabled={isSubmitting}
                     >
                         {isSubmitting ? 'Authenticating' : 'Sign In'}
